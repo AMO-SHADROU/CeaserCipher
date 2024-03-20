@@ -17,19 +17,29 @@ def show_hands():
     print(dealer_hand[0])
 
 
-def new_round():
+def add_to_user_hand():
     random_key = random.choice(list(cards.keys()))
     random_value = cards[random_key]
     if random_key == "ace":
         user_ace_choice = int(input("Do you want to go with 1 or 11 for ace? "))
         random_value = user_ace_choice
-    user_hand.append(random_value)
+    return random_value
+
+
+def add_to_dealer_hand():
     random_key = random.choice(list(cards.keys()))
     random_value = cards[random_key]
     if random_key == "ace" and sum(dealer_hand) < 21:
         random_value = 11
     elif random_key == "ace":
         random_value = 1
+    return random_value
+
+
+def new_round():
+    random_value = add_to_user_hand()
+    user_hand.append(random_value)
+    random_value = add_to_dealer_hand()
     dealer_hand.append(random_value)
     show_hands()
 
@@ -55,7 +65,8 @@ while game_is_on:
     elif user_choice == "n":
         check_hands()
         if sum(dealer_hand) < 17:
-            dealer_hand.append(random.choice(list(cards.keys())))
+            new_random_value = add_to_dealer_hand()
+            dealer_hand.append(new_random_value)
         if sum(user_hand) == 21 or sum(user_hand) > sum(dealer_hand):
             print("You won!")
             game_is_on = False
